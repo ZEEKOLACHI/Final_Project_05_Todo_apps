@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Markdown → PDF Converter</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.1/marked.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Source+Serif+4:wght@400;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1A1A2E;--card:#16213E;--border:#0F3460;--accent:#E94560;--text:#ECF0F1;--muted:#7F8C8D}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;margin:0}
+textarea{background:var(--card);color:#ABB2BF;border:none;resize:none;font-family:'Fira Code',monospace;font-size:14px;line-height:1.7;outline:none}
+#preview{font-family:'Source Serif 4',serif;line-height:1.8;color:#1a1a2e}
+#preview h1{font-size:2em;font-weight:700;margin:.8em 0 .4em;border-bottom:2px solid #E94560;padding-bottom:.2em}
+#preview h2{font-size:1.5em;font-weight:700;margin:.7em 0 .3em;color:#16213E}
+#preview h3{font-size:1.2em;font-weight:600;margin:.6em 0 .2em}
+#preview p{margin:.5em 0}
+#preview code{background:#f4f4f8;padding:2px 6px;border-radius:4px;font-family:'Fira Code',monospace;font-size:.85em;color:#E94560}
+#preview pre{background:#1a1a2e;color:#ABB2BF;padding:16px;border-radius:10px;overflow-x:auto;margin:1em 0}
+#preview pre code{background:none;color:inherit;padding:0}
+#preview ul,#preview ol{margin:.5em 0;padding-left:1.5em}
+#preview li{margin:.2em 0}
+#preview blockquote{border-left:4px solid #E94560;padding:8px 16px;margin:1em 0;background:#fef2f2;border-radius:0 8px 8px 0;color:#444}
+#preview table{border-collapse:collapse;width:100%;margin:1em 0}
+#preview th,#preview td{border:1px solid #ddd;padding:8px 12px;text-align:left}
+#preview th{background:#f4f4f8;font-weight:600}
+#preview a{color:#E94560;text-decoration:underline}
+#preview hr{border:none;border-top:2px solid #eee;margin:1.5em 0}
+@media print{body{background:#fff}#toolbar,#editor-pane{display:none!important}#preview-pane{position:static!important;width:100%!important;box-shadow:none!important;border:none!important}}
+</style>
+</head>
+<body>
+<!-- Toolbar -->
+<div id="toolbar" class="flex items-center justify-between px-6 py-3" style="background:var(--card);border-bottom:1px solid var(--border)">
+  <div class="flex items-center gap-3">
+    <span class="text-xs px-2 py-1 rounded-full font-medium" style="background:rgba(233,69,96,.15);color:var(--accent)">SKILL 4</span>
+    <h1 class="font-bold">Markdown → PDF</h1>
+  </div>
+  <div class="flex gap-2">
+    <button onclick="downloadPDF()" class="px-4 py-2 rounded-lg font-bold text-sm text-white transition hover:scale-105" style="background:var(--accent)">📥 Download PDF</button>
+  </div>
+</div>
+
+<!-- Editor + Preview -->
+<div class="flex" style="height:calc(100vh - 56px)">
+  <!-- Editor -->
+  <div id="editor-pane" class="w-1/2 flex flex-col" style="border-right:1px solid var(--border)">
+    <div class="px-4 py-2 text-xs font-medium" style="color:var(--muted);background:rgba(0,0,0,.2)">MARKDOWN</div>
+    <textarea id="editor" class="flex-1 p-4 w-full" spellcheck="false">## 📄 My Document
+
+Welcome to the **Markdown to PDF** converter! Edit this text and see the live preview on the right.
+
+### Features
+
+- **Live preview** as you type
+- Supports **bold**, *italic*, `code`, and more
+- One-click **PDF download**
+- Clean, professional formatting
+
+### Code Example
+
+```python
+def hello():
+    print("Hello, World!")
+```
+
+### Table Example
+
+| Feature | Status |
+|---------|--------|
+| Headings | ✅ |
+| Lists | ✅ |
+| Code blocks | ✅ |
+| Tables | ✅ |
+| Blockquotes | ✅ |
+
+> 💡 **Tip:** Write your notes in Markdown and export them as professional PDFs!
+
+---
+
+*Built for PIAIC Hackathon 0*
+</textarea>
+  </div>
+
+  <!-- Preview -->
+  <div id="preview-pane" class="w-1/2 overflow-auto" style="background:#fff">
+    <div class="px-4 py-2 text-xs font-medium" style="color:var(--muted);background:#f9f9f9;border-bottom:1px solid #eee">PREVIEW</div>
+    <div id="preview" class="p-8 max-w-none"></div>
+  </div>
+</div>
+
+<script>
+const editor=document.getElementById('editor');
+const preview=document.getElementById('preview');
+
+function updatePreview(){preview.innerHTML=marked.parse(editor.value);}
+editor.addEventListener('input',updatePreview);
+updatePreview();
+
+function downloadPDF(){
+  const printWin=window.open('','_blank');
+  printWin.document.write(`
+    <html><head><title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <style>
+      body{font-family:'Source Serif 4',serif;max-width:700px;margin:40px auto;padding:0 20px;color:#1a1a2e;line-height:1.8}
+      h1{font-size:2em;border-bottom:2px solid #E94560;padding-bottom:.2em}
+      h2{font-size:1.5em;color:#16213E}
+      code{background:#f4f4f8;padding:2px 6px;border-radius:4px;font-family:'Fira Code',monospace;font-size:.85em;color:#E94560}
+      pre{background:#1a1a2e;color:#ABB2BF;padding:16px;border-radius:10px;overflow-x:auto}
+      pre code{background:none;color:inherit}
+      blockquote{border-left:4px solid #E94560;padding:8px 16px;background:#fef2f2;border-radius:0 8px 8px 0;color:#444}
+      table{border-collapse:collapse;width:100%}th,td{border:1px solid #ddd;padding:8px 12px}th{background:#f4f4f8}
+      a{color:#E94560} hr{border:none;border-top:2px solid #eee;margin:1.5em 0}
+    </style></head><body>${preview.innerHTML}</body></html>
+  `);
+  printWin.document.close();
+  setTimeout(()=>{printWin.print();},500);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pomodoro Focus Timer</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0F;--card:#111119;--border:#1E1E2E;--accent:#FF6B6B;--green:#4ADE80;--blue:#60A5FA;--text:#E8E8F0;--muted:#6B6B80}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.mono{font-family:'JetBrains Mono',monospace}
+.timer-ring{width:280px;height:280px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center}
+.timer-ring svg{position:absolute;top:0;left:0;transform:rotate(-90deg)}
+.timer-ring circle{fill:none;stroke-width:6}
+.glass{background:rgba(17,17,25,.9);border:1px solid var(--border);backdrop-filter:blur(8px)}
+.tab{padding:8px 20px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;transition:.2s}
+.tab.active{background:var(--accent);color:#fff}
+.tab:not(.active){color:var(--muted)}
+.tab:not(.active):hover{background:rgba(255,107,107,.1)}
+input[type=text]{background:var(--card);border:1px solid var(--border);color:var(--text);outline:none}
+input[type=text]:focus{border-color:var(--accent)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.pulsing{animation:pulse 1.5s ease infinite}
+</style>
+</head>
+<body>
+<div class="max-w-lg mx-auto px-4 py-8">
+  <header class="text-center mb-6">
+    <div class="inline-block px-3 py-1 rounded-full text-xs font-medium mb-3" style="background:rgba(255,107,107,.12);color:var(--accent);">SKILL 2</div>
+    <h1 class="text-3xl font-bold mono" style="color:var(--accent);">Pomodoro Timer</h1>
+    <p class="text-sm mt-1" style="color:var(--muted);">Focus. Break. Repeat.</p>
+  </header>
+
+  <!-- Mode Tabs -->
+  <div class="flex justify-center gap-2 mb-8">
+    <div class="tab active" onclick="setMode('focus')" id="tab-focus">Focus</div>
+    <div class="tab" onclick="setMode('short')" id="tab-short">Short Break</div>
+    <div class="tab" onclick="setMode('long')" id="tab-long">Long Break</div>
+  </div>
+
+  <!-- Timer Ring -->
+  <div class="flex justify-center mb-8">
+    <div class="timer-ring glass" style="border:none;">
+      <svg width="280" height="280">
+        <circle cx="140" cy="140" r="130" stroke="var(--border)"/>
+        <circle cx="140" cy="140" r="130" stroke="var(--accent)" stroke-dasharray="816.8" id="ring" stroke-linecap="round"/>
+      </svg>
+      <div class="text-center z-10">
+        <div class="mono text-6xl font-bold" id="timeDisplay">25:00</div>
+        <div class="text-sm mt-1" style="color:var(--muted);" id="modeLabel">Focus Time</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="flex justify-center gap-4 mb-8">
+    <button onclick="toggleTimer()" id="startBtn" class="px-8 py-3 rounded-xl font-bold text-white text-lg transition-all hover:scale-105" style="background:var(--accent);">▶ Start</button>
+    <button onclick="resetTimer()" class="px-6 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105 glass">↻ Reset</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="grid grid-cols-3 gap-3 mb-8">
+    <div class="glass rounded-xl p-4 text-center">
+      <div class="mono text-2xl font-bold" style="color:var(--accent);" id="sessionCount">0</div>
+      <div class="text-xs" style="color:var(--muted);">Sessions</div>
+    </div>
+    <div class="glass rounded-xl p-4 text-center">
+      <div class="mono text-2xl font-bold" style="color:var(--green);" id="totalMins">0</div>
+      <div class="text-xs" style="color:var(--muted);">Minutes</div>
+    </div>
+    <div class="glass rounded-xl p-4 text-center">
+      <div class="mono text-2xl font-bold" style="color:var(--blue);" id="streak">0</div>
+      <div class="text-xs" style="color:var(--muted);">Streak</div>
+    </div>
+  </div>
+
+  <!-- Task List -->
+  <div class="glass rounded-2xl p-5">
+    <h3 class="font-bold mb-3">📋 Tasks</h3>
+    <div class="flex gap-2 mb-4">
+      <input type="text" id="taskInput" placeholder="Add a task..." class="flex-1 px-4 py-2 rounded-lg text-sm" onkeydown="if(event.key==='Enter')addTask()">
+      <button onclick="addTask()" class="px-4 py-2 rounded-lg font-bold text-sm text-white" style="background:var(--accent);">+</button>
+    </div>
+    <div id="taskList" class="space-y-2"></div>
+    <div id="emptyTasks" class="text-center py-4 text-sm" style="color:var(--muted);">No tasks yet — add one above!</div>
+  </div>
+</div>
+
+<script>
+const MODES = { focus:{time:25*60,label:'Focus Time',color:'#FF6B6B'}, short:{time:5*60,label:'Short Break',color:'#4ADE80'}, long:{time:15*60,label:'Long Break',color:'#60A5FA'} };
+let mode='focus', timeLeft=MODES.focus.time, totalTime=MODES.focus.time, running=false, interval=null;
+let sessions=0, totalMinutes=0, streak=0, tasks=[];
+
+function setMode(m) {
+  mode=m; timeLeft=MODES[m].time; totalTime=MODES[m].time; running=false;
+  clearInterval(interval);
+  document.getElementById('startBtn').innerHTML='▶ Start';
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+m).classList.add('active');
+  document.getElementById('ring').style.stroke=MODES[m].color;
+  document.getElementById('modeLabel').textContent=MODES[m].label;
+  document.documentElement.style.setProperty('--accent',MODES[m].color);
+  updateDisplay();
+}
+
+function updateDisplay() {
+  const m=Math.floor(timeLeft/60), s=timeLeft%60;
+  document.getElementById('timeDisplay').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  const pct=(totalTime-timeLeft)/totalTime;
+  document.getElementById('ring').style.strokeDashoffset=816.8-(816.8*pct);
+  document.getElementById('timeDisplay').classList.toggle('pulsing',running);
+}
+
+function toggleTimer() {
+  if(running){running=false;clearInterval(interval);document.getElementById('startBtn').innerHTML='▶ Start';}
+  else{running=true;document.getElementById('startBtn').innerHTML='⏸ Pause';interval=setInterval(tick,1000);}
+  updateDisplay();
+}
+
+function tick() {
+  if(timeLeft<=0){clearInterval(interval);running=false;onComplete();return;}
+  timeLeft--;updateDisplay();
+}
+
+function onComplete() {
+  document.getElementById('startBtn').innerHTML='▶ Start';
+  try{new Audio('data:audio/wav;base64,UklGRl9vT19teleXBl').play();}catch(e){}
+  if(mode==='focus'){sessions++;totalMinutes+=25;streak++;
+    document.getElementById('sessionCount').textContent=sessions;
+    document.getElementById('totalMins').textContent=totalMinutes;
+    document.getElementById('streak').textContent=streak;
+    alert('🎉 Focus session complete! Take a break.');
+    setMode(sessions%4===0?'long':'short');
+  } else { alert('⏰ Break over! Time to focus.'); setMode('focus'); }
+}
+
+function resetTimer(){setMode(mode);}
+
+function addTask() {
+  const input=document.getElementById('taskInput');
+  const text=input.value.trim();
+  if(!text)return;
+  tasks.push({id:Date.now(),text,done:false,pomodoros:0});
+  input.value='';renderTasks();
+}
+
+function toggleTask(id){const t=tasks.find(t=>t.id===id);if(t)t.done=!t.done;renderTasks();}
+function deleteTask(id){tasks=tasks.filter(t=>t.id!==id);renderTasks();}
+
+function renderTasks() {
+  const el=document.getElementById('taskList');
+  document.getElementById('emptyTasks').style.display=tasks.length?'none':'block';
+  el.innerHTML=tasks.map(t=>`
+    <div class="flex items-center gap-3 p-3 rounded-lg" style="background:var(--card);">
+      <input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})" class="w-4 h-4 accent-[var(--accent)]">
+      <span class="flex-1 text-sm ${t.done?'line-through opacity-50':''}">${t.text}</span>
+      <span class="mono text-xs" style="color:var(--muted);">🍅${t.pomodoros}</span>
+      <button onclick="deleteTask(${t.id})" class="text-xs px-2 py-1 rounded hover:bg-red-900/30" style="color:#EF4444;">✕</button>
+    </div>
+  `).join('');
+}
+updateDisplay();
+</script>
+</body>
+</html>

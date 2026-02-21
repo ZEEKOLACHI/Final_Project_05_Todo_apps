@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Code Generator</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F0FDF4;--card:#fff;--border:#D1FAE5;--accent:#059669;--accent2:#10B981;--text:#064E3B;--muted:#6B7280}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;box-shadow:0 4px 24px rgba(5,150,105,.08)}
+input,select,textarea{background:#F9FAFB;border:1px solid #E5E7EB;border-radius:12px;padding:10px 14px;font-size:14px;color:var(--text);outline:none;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(5,150,105,.1)}
+.tab{padding:8px 18px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;transition:.2s}
+.tab.active{background:var(--accent);color:#fff}
+.tab:not(.active){color:var(--muted);background:#F3F4F6}
+.tab:not(.active):hover{background:#E5E7EB}
+#qrcode{display:flex;justify-content:center;align-items:center;min-height:200px}
+#qrcode img,#qrcode canvas{border-radius:12px!important}
+</style>
+</head>
+<body>
+<div class="max-w-2xl mx-auto px-4 py-10">
+  <header class="text-center mb-8">
+    <div class="inline-block px-3 py-1 rounded-full text-xs font-medium mb-3" style="background:#D1FAE5;color:var(--accent);">SKILL 5</div>
+    <h1 class="text-4xl font-bold" style="color:var(--accent);">📱 QR Code Generator</h1>
+    <p class="text-sm mt-2" style="color:var(--muted);">Generate custom QR codes for anything — instantly</p>
+  </header>
+
+  <!-- Type Tabs -->
+  <div class="flex flex-wrap justify-center gap-2 mb-6">
+    <div class="tab active" onclick="setType('url')">🔗 URL</div>
+    <div class="tab" onclick="setType('text')">📝 Text</div>
+    <div class="tab" onclick="setType('wifi')">📶 WiFi</div>
+    <div class="tab" onclick="setType('email')">✉️ Email</div>
+    <div class="tab" onclick="setType('phone')">📞 Phone</div>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-6">
+    <!-- Input -->
+    <div class="card">
+      <h3 class="font-bold mb-4">⚙️ Configuration</h3>
+
+      <!-- URL Input -->
+      <div id="input-url" class="space-y-3">
+        <label class="text-sm font-medium">Website URL</label>
+        <input type="url" id="urlInput" placeholder="https://example.com" oninput="generate()">
+      </div>
+      <!-- Text Input -->
+      <div id="input-text" class="space-y-3 hidden">
+        <label class="text-sm font-medium">Text Content</label>
+        <textarea id="textInput" rows="3" placeholder="Enter any text..." oninput="generate()"></textarea>
+      </div>
+      <!-- WiFi Input -->
+      <div id="input-wifi" class="space-y-3 hidden">
+        <label class="text-sm font-medium">Network Name (SSID)</label>
+        <input type="text" id="wifiSSID" placeholder="MyWiFi" oninput="generate()">
+        <label class="text-sm font-medium">Password</label>
+        <input type="text" id="wifiPass" placeholder="password123" oninput="generate()">
+        <label class="text-sm font-medium">Encryption</label>
+        <select id="wifiEnc" onchange="generate()"><option>WPA</option><option>WEP</option><option>nopass</option></select>
+      </div>
+      <!-- Email Input -->
+      <div id="input-email" class="space-y-3 hidden">
+        <label class="text-sm font-medium">Email Address</label>
+        <input type="email" id="emailInput" placeholder="hello@example.com" oninput="generate()">
+        <label class="text-sm font-medium">Subject (optional)</label>
+        <input type="text" id="emailSubject" placeholder="Subject line" oninput="generate()">
+      </div>
+      <!-- Phone Input -->
+      <div id="input-phone" class="space-y-3 hidden">
+        <label class="text-sm font-medium">Phone Number</label>
+        <input type="tel" id="phoneInput" placeholder="+92 300 1234567" oninput="generate()">
+      </div>
+
+      <!-- Colors & Size -->
+      <div class="mt-6 pt-4" style="border-top:1px solid #E5E7EB">
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div><label class="text-xs font-medium" style="color:var(--muted)">QR Color</label><input type="color" id="fgColor" value="#059669" onchange="generate()" class="h-10 cursor-pointer"></div>
+          <div><label class="text-xs font-medium" style="color:var(--muted)">Background</label><input type="color" id="bgColor" value="#FFFFFF" onchange="generate()" class="h-10 cursor-pointer"></div>
+        </div>
+        <label class="text-xs font-medium" style="color:var(--muted)">Size: <span id="sizeLabel">256</span>px</label>
+        <input type="range" id="sizeRange" min="128" max="512" step="64" value="256" oninput="document.getElementById('sizeLabel').textContent=this.value;generate()" class="w-full mt-1">
+      </div>
+    </div>
+
+    <!-- QR Output -->
+    <div class="card flex flex-col items-center justify-center">
+      <div id="qrcode" class="mb-4"></div>
+      <p class="text-xs mb-4" style="color:var(--muted)" id="qrStatus">Enter data to generate QR code</p>
+      <button onclick="downloadQR()" id="downloadBtn" class="px-6 py-2 rounded-xl font-bold text-white text-sm transition hover:scale-105 disabled:opacity-40" style="background:var(--accent)" disabled>📥 Download PNG</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentType='url',qr=null;
+
+function setType(type){
+  currentType=type;
+  document.querySelectorAll('[id^="input-"]').forEach(el=>el.classList.add('hidden'));
+  document.getElementById('input-'+type).classList.remove('hidden');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  event.target.classList.add('active');
+  generate();
+}
+
+function getData(){
+  switch(currentType){
+    case 'url': return document.getElementById('urlInput').value;
+    case 'text': return document.getElementById('textInput').value;
+    case 'wifi': {
+      const s=document.getElementById('wifiSSID').value;
+      const p=document.getElementById('wifiPass').value;
+      const e=document.getElementById('wifiEnc').value;
+      return s?`WIFI:T:${e};S:${s};P:${p};;`:'';
+    }
+    case 'email': {
+      const e=document.getElementById('emailInput').value;
+      const sub=document.getElementById('emailSubject').value;
+      return e?`mailto:${e}${sub?'?subject='+encodeURIComponent(sub):''}`:'';
+    }
+    case 'phone': {
+      const p=document.getElementById('phoneInput').value;
+      return p?`tel:${p}`:'';
+    }
+  }
+  return '';
+}
+
+function generate(){
+  const data=getData();
+  const container=document.getElementById('qrcode');
+  container.innerHTML='';
+  if(!data){
+    document.getElementById('qrStatus').textContent='Enter data to generate QR code';
+    document.getElementById('downloadBtn').disabled=true;
+    return;
+  }
+  const size=parseInt(document.getElementById('sizeRange').value);
+  qr=new QRCode(container,{
+    text:data,width:size,height:size,
+    colorDark:document.getElementById('fgColor').value,
+    colorLight:document.getElementById('bgColor').value,
+    correctLevel:QRCode.CorrectLevel.H
+  });
+  document.getElementById('qrStatus').textContent='✅ QR Code ready!';
+  document.getElementById('downloadBtn').disabled=false;
+}
+
+function downloadQR(){
+  const canvas=document.querySelector('#qrcode canvas');
+  if(!canvas)return;
+  const a=document.createElement('a');
+  a.download='qr-code.png';a.href=canvas.toDataURL('image/png');a.click();
+}
+</script>
+</body>
+</html>
