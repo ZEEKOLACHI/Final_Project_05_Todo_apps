@@ -9,17 +9,17 @@ Built for **PIAIC Hackathon 0** | Inspired by **Sir Qasim's AI Employee Vault**
 | Platform | URL |
 |----------|-----|
 | **Vercel** | https://hackathon-0-skills.vercel.app |
-| **GitHub Pages** | https://zeekolachi.github.io/Final_Project_05_Todo_apps/ |
+| **GitHub Pages** | https://zeekolachi.github.io/Hackathon-0/ |
 
 ## 📋 The 5 Skills
 
 | # | Skill | Live App | Description | Deploy |
 |---|-------|----------|-------------|--------|
-| 1 | **Resume Analyzer** | [Vercel](https://hackathon-0-skills.vercel.app/apps/resume-analyzer.html) · [Pages](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/resume-analyzer.html) | AI resume scoring, ATS check, keyword matching | ✅ Free |
-| 2 | **Pomodoro Timer** | [Vercel](https://hackathon-0-skills.vercel.app/apps/pomodoro-timer.html) · [Pages](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/pomodoro-timer.html) | Focus timer with task tracking & session stats | ✅ Free |
-| 3 | **Expense Tracker** | [Vercel](https://hackathon-0-skills.vercel.app/apps/expense-tracker.html) · [Pages](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/expense-tracker.html) | Track spending with charts, budgets & CSV export | ✅ Free |
-| 4 | **Markdown → PDF** | [Vercel](https://hackathon-0-skills.vercel.app/apps/markdown-to-pdf.html) · [Pages](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/markdown-to-pdf.html) | Live markdown editor with PDF export | ✅ Free |
-| 5 | **QR Code Generator** | [Vercel](https://hackathon-0-skills.vercel.app/apps/qr-code-generator.html) · [Pages](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/qr-code-generator.html) | Custom QR codes for URLs, WiFi, contacts | ✅ Free |
+| 1 | **Resume Analyzer** | [Vercel](https://hackathon-0-skills.vercel.app/apps/resume-analyzer.html) · [Pages](https://zeekolachi.github.io/Hackathon-0/apps/resume-analyzer.html) | AI resume scoring, ATS check, keyword matching | ✅ Free |
+| 2 | **Pomodoro Timer** | [Vercel](https://hackathon-0-skills.vercel.app/apps/pomodoro-timer.html) · [Pages](https://zeekolachi.github.io/Hackathon-0/apps/pomodoro-timer.html) | Focus timer with task tracking & session stats | ✅ Free |
+| 3 | **Expense Tracker** | [Vercel](https://hackathon-0-skills.vercel.app/apps/expense-tracker.html) · [Pages](https://zeekolachi.github.io/Hackathon-0/apps/expense-tracker.html) | Track spending with charts, budgets & CSV export | ✅ Free |
+| 4 | **Markdown → PDF** | [Vercel](https://hackathon-0-skills.vercel.app/apps/markdown-to-pdf.html) · [Pages](https://zeekolachi.github.io/Hackathon-0/apps/markdown-to-pdf.html) | Live markdown editor with PDF export | ✅ Free |
+| 5 | **QR Code Generator** | [Vercel](https://hackathon-0-skills.vercel.app/apps/qr-code-generator.html) · [Pages](https://zeekolachi.github.io/Hackathon-0/apps/qr-code-generator.html) | Custom QR codes for URLs, WiFi, contacts | ✅ Free |
 
 Each skill has:
 - ✅ `SKILL.md` — Agent skill definition (YAML frontmatter + instructions)
@@ -57,11 +57,11 @@ project/
 
 | App | Vercel | GitHub Pages |
 |-----|--------|--------------|
-| Resume Analyzer | [Open](https://hackathon-0-skills.vercel.app/apps/resume-analyzer.html) | [Open](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/resume-analyzer.html) |
-| Pomodoro Timer | [Open](https://hackathon-0-skills.vercel.app/apps/pomodoro-timer.html) | [Open](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/pomodoro-timer.html) |
-| Expense Tracker | [Open](https://hackathon-0-skills.vercel.app/apps/expense-tracker.html) | [Open](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/expense-tracker.html) |
-| Markdown → PDF | [Open](https://hackathon-0-skills.vercel.app/apps/markdown-to-pdf.html) | [Open](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/markdown-to-pdf.html) |
-| QR Code Generator | [Open](https://hackathon-0-skills.vercel.app/apps/qr-code-generator.html) | [Open](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/qr-code-generator.html) |
+| Resume Analyzer | [Open](https://hackathon-0-skills.vercel.app/apps/resume-analyzer.html) | [Open](https://zeekolachi.github.io/Hackathon-0/apps/resume-analyzer.html) |
+| Pomodoro Timer | [Open](https://hackathon-0-skills.vercel.app/apps/pomodoro-timer.html) | [Open](https://zeekolachi.github.io/Hackathon-0/apps/pomodoro-timer.html) |
+| Expense Tracker | [Open](https://hackathon-0-skills.vercel.app/apps/expense-tracker.html) | [Open](https://zeekolachi.github.io/Hackathon-0/apps/expense-tracker.html) |
+| Markdown → PDF | [Open](https://hackathon-0-skills.vercel.app/apps/markdown-to-pdf.html) | [Open](https://zeekolachi.github.io/Hackathon-0/apps/markdown-to-pdf.html) |
+| QR Code Generator | [Open](https://hackathon-0-skills.vercel.app/apps/qr-code-generator.html) | [Open](https://zeekolachi.github.io/Hackathon-0/apps/qr-code-generator.html) |
 
 ## 🚀 How to Deploy (Free)
 
