@@ -6,11 +6,11 @@ Built for **PIAIC Hackathon 0** | Inspired by **Sir Qasim's AI Employee Vault**
 
 | # | Skill | Live App | Description | Deploy |
 |---|-------|----------|-------------|--------|
-| 1 | **Resume Analyzer** | `apps/resume-analyzer.html` | AI resume scoring, ATS check, keyword matching | ✅ Free |
-| 2 | **Pomodoro Timer** | `apps/pomodoro-timer.html` | Focus timer with task tracking & session stats | ✅ Free |
-| 3 | **Expense Tracker** | `apps/expense-tracker.html` | Track spending with charts, budgets & CSV export | ✅ Free |
-| 4 | **Markdown → PDF** | `apps/markdown-to-pdf.html` | Live markdown editor with PDF export | ✅ Free |
-| 5 | **QR Code Generator** | `apps/qr-code-generator.html` | Custom QR codes for URLs, WiFi, contacts | ✅ Free |
+| 1 | **Resume Analyzer** | [Live App](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/resume-analyzer.html) | AI resume scoring, ATS check, keyword matching | ✅ Free |
+| 2 | **Pomodoro Timer** | [Live App](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/pomodoro-timer.html) | Focus timer with task tracking & session stats | ✅ Free |
+| 3 | **Expense Tracker** | [Live App](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/expense-tracker.html) | Track spending with charts, budgets & CSV export | ✅ Free |
+| 4 | **Markdown → PDF** | [Live App](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/markdown-to-pdf.html) | Live markdown editor with PDF export | ✅ Free |
+| 5 | **QR Code Generator** | [Live App](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/qr-code-generator.html) | Custom QR codes for URLs, WiFi, contacts | ✅ Free |
 
 Each skill has:
 - ✅ `SKILL.md` — Agent skill definition (YAML frontmatter + instructions)
@@ -40,6 +40,18 @@ project/
 │   └── qr-code-generator.html
 └── README.md
 ```
+
+## 🌐 Live Site
+
+**GitHub Pages:** https://zeekolachi.github.io/Final_Project_05_Todo_apps/
+
+| App | Direct Link |
+|-----|-------------|
+| Resume Analyzer | https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/resume-analyzer.html |
+| Pomodoro Timer | https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/pomodoro-timer.html |
+| Expense Tracker | https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/expense-tracker.html |
+| Markdown → PDF | https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/markdown-to-pdf.html |
+| QR Code Generator | https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/qr-code-generator.html |
 
 ## 🚀 How to Deploy (Free)
 
