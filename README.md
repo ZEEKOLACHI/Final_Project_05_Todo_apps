@@ -2,6 +2,15 @@
 
 Built for **PIAIC Hackathon 0** | Inspired by **Sir Qasim's AI Employee Vault**
 
+> **Final Project of NED Course — Fundamental of Agentic AI**
+
+## 🏠 Landing Page
+
+| Platform | URL |
+|----------|-----|
+| **Vercel** | https://hackathon-0-skills.vercel.app |
+| **GitHub Pages** | https://zeekolachi.github.io/Final_Project_05_Todo_apps/ |
+
 ## 📋 The 5 Skills
 
 | # | Skill | Live App | Description | Deploy |
@@ -21,6 +30,7 @@ Each skill has:
 
 ```
 project/
+├── index.html              ← Landing page
 ├── skills/
 │   ├── resume-analyzer/
 │   │   └── SKILL.md
@@ -42,11 +52,6 @@ project/
 ```
 
 ## 🌐 Live Site
-
-| Platform | URL |
-|----------|-----|
-| **Vercel** | https://hackathon-0-skills.vercel.app |
-| **GitHub Pages** | https://zeekolachi.github.io/Final_Project_05_Todo_apps/ |
 
 ### Direct App Links
 
