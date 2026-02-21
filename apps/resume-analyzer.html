@@ -121,7 +121,7 @@ function performAnalysis(resume, jobDesc) {
     experience: hasExperience ? 70 + Math.floor(Math.random()*25) : 15,
     education: hasEducation ? 75 + Math.floor(Math.random()*20) : 20,
     skills: hasSkills ? 80 + Math.floor(Math.random()*15) : 25,
-    format: words > 150 && words < 900 ? 85 : words > 80 ? 60 : 30,
+    format: words > 120 && words < 900 ? 85 : words > 80 ? 60 : 30,
     impact: /increased|improved|reduced|achieved|delivered|built|led|managed/i.test(resume) ? 80 + Math.floor(Math.random()*15) : 35,
   };
 
@@ -181,7 +181,7 @@ function performAnalysis(resume, jobDesc) {
   if (!hasProjects) suggestions.push({ icon:'🚀', text:'Consider adding a projects section to showcase your work' });
   if (!/\d+%|\d+ percent|increased|reduced by/i.test(resume)) suggestions.push({ icon:'📊', text:'Add quantifiable achievements (e.g., "Increased sales by 30%")' });
   // Fix 6: corrected word-count thresholds
-  if (words < 150) suggestions.push({ icon:'📏', text:'Resume seems short. Consider expanding your experience descriptions' });
+  if (words < 120) suggestions.push({ icon:'📏', text:'Resume seems short. Consider expanding your experience descriptions' });
   if (words > 900) suggestions.push({ icon:'✂️', text:'Resume may be too long. Keep it concise — 1-2 pages max' });
   // Fix 7: suggest adding missing JD keywords if match rate is low
   if (keywordResults.length > 0) {
