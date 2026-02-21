@@ -103,7 +103,8 @@ function analyzeResume() {
 
 function performAnalysis(resume, jobDesc) {
   const lower = resume.toLowerCase();
-  const words = resume.split(/\s+/).length;
+  // Fix 1: accurate word count — filter empty tokens
+  const words = resume.split(/\s+/).filter(w => w.length > 0).length;
   const lines = resume.split('\n').filter(l => l.trim()).length;
 
   // Section detection
@@ -114,17 +115,62 @@ function performAnalysis(resume, jobDesc) {
   const hasSummary = /summary|objective|profile|about/i.test(resume);
   const hasProjects = /project|portfolio|built|developed/i.test(resume);
 
-  // Scoring
+  // Scoring — Fix 2: format score uses corrected word threshold
   const scores = {
     contact: hasContact ? 85 + Math.floor(Math.random()*15) : 20,
     experience: hasExperience ? 70 + Math.floor(Math.random()*25) : 15,
     education: hasEducation ? 75 + Math.floor(Math.random()*20) : 20,
     skills: hasSkills ? 80 + Math.floor(Math.random()*15) : 25,
-    format: words > 200 && words < 800 ? 85 : words > 100 ? 60 : 30,
+    format: words > 150 && words < 900 ? 85 : words > 80 ? 60 : 30,
     impact: /increased|improved|reduced|achieved|delivered|built|led|managed/i.test(resume) ? 80 + Math.floor(Math.random()*15) : 35,
   };
 
   const overall = Math.round(Object.values(scores).reduce((a,b)=>a+b,0) / Object.keys(scores).length);
+
+  // Fix 3: expanded stop words list to filter non-skill words
+  const stopWords = new Set([
+    'the','and','for','with','that','this','from','are','was','have','has','will','been',
+    'they','their','your','which','about','into','than','also','some','more','other','each',
+    'such','when','very','just','like','only','must','should','would','could','need','able',
+    'work','working','looking','strong','good','great','well','high','level','using','used',
+    'help','team','role','join','make','take','build','lead','our','you','who','what','how',
+    'its','all','any','new','can','get','not','but','may','etc','per','via','both','least',
+    'company','position','candidate','applicant','required','preferred','plus','bonus',
+    'including','following','related','relevant','various','multiple','across','within',
+    'between','through','over','under','along','around','every','many','most','much',
+    'knowledge','understanding','familiarity','proficiency','ability','skills','proven',
+    'demonstrated','excellent','exceptional','solid','deep','broad','extensive','hands',
+  ]);
+
+  // Fix 4: extract meaningful tech keywords using word-boundary tokenization from full JD
+  // Prioritise multi-word tech terms first (e.g. "ci/cd", "node.js"), then single words
+  let keywordResults = [];
+  if (jobDesc) {
+    const jdLower = jobDesc.toLowerCase();
+
+    // Extract compound tech tokens (with dots, slashes, plus signs, hash)
+    const compoundTokens = [...new Set(jdLower.match(/\b[\w]+(?:[./#+][\w]+)+\b/g) || [])];
+
+    // Extract regular words (min length 3, letters only)
+    const singleTokens = [...new Set(jdLower.match(/\b[a-z]{3,}\b/g) || [])];
+
+    // Filter single tokens: remove stop words, require length > 3
+    const filteredSingle = singleTokens.filter(w => !stopWords.has(w) && w.length > 3);
+
+    // Combine: compound tokens first, then single words, deduplicated
+    const allKeywords = [...new Set([...compoundTokens, ...filteredSingle])];
+
+    // Fix 5: word-boundary match — prevents "java" matching inside "javascript"
+    const matchKeyword = (kw) => {
+      // For compound tokens (node.js, ci/cd) use escaped regex
+      const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return new RegExp('(?:^|[\\s,/|&()])' + escaped + '(?=[\\s,/|&().!?]|$)').test(lower);
+    };
+
+    // Take up to 30 most relevant keywords
+    const top30 = allKeywords.slice(0, 30);
+    keywordResults = top30.map(kw => ({ keyword: kw, found: matchKeyword(kw) }));
+  }
 
   // Suggestions
   const suggestions = [];
@@ -134,19 +180,19 @@ function performAnalysis(resume, jobDesc) {
   if (!hasSkills) suggestions.push({ icon:'🛠️', text:'Add a skills section listing your technical and soft skills' });
   if (!hasProjects) suggestions.push({ icon:'🚀', text:'Consider adding a projects section to showcase your work' });
   if (!/\d+%|\d+ percent|increased|reduced by/i.test(resume)) suggestions.push({ icon:'📊', text:'Add quantifiable achievements (e.g., "Increased sales by 30%")' });
-  if (words < 200) suggestions.push({ icon:'📏', text:'Resume is too short. Aim for 400-600 words for best ATS results' });
+  // Fix 6: corrected word-count thresholds
+  if (words < 150) suggestions.push({ icon:'📏', text:'Resume seems short. Consider expanding your experience descriptions' });
   if (words > 900) suggestions.push({ icon:'✂️', text:'Resume may be too long. Keep it concise — 1-2 pages max' });
-  if (suggestions.length === 0) suggestions.push({ icon:'🎉', text:'Great resume! Consider tailoring keywords to each specific job posting' });
-
-  // Keyword matching
-  let keywordResults = [];
-  if (jobDesc) {
-    const jdWords = [...new Set(jobDesc.toLowerCase().match(/\b[a-z]{3,}\b/g) || [])];
-    const stopWords = new Set(['the','and','for','with','that','this','from','are','was','have','has','will','been','they','their','your','which','about','into','than','also','some','more','other','each','such','when','very','just','like','only']);
-    const meaningful = jdWords.filter(w => !stopWords.has(w) && w.length > 3);
-    const top20 = meaningful.slice(0, 20);
-    keywordResults = top20.map(kw => ({ keyword: kw, found: lower.includes(kw) }));
+  // Fix 7: suggest adding missing JD keywords if match rate is low
+  if (keywordResults.length > 0) {
+    const missed = keywordResults.filter(k => !k.found).map(k => k.keyword);
+    const matchRate = (keywordResults.length - missed.length) / keywordResults.length;
+    if (matchRate < 0.5 && missed.length > 0) {
+      const missedSample = missed.slice(0, 5).join(', ');
+      suggestions.push({ icon:'🔑', text:`Low keyword match with job description. Consider adding: ${missedSample}` });
+    }
   }
+  if (suggestions.length === 0) suggestions.push({ icon:'🎉', text:'Great resume! Consider tailoring keywords to each specific job posting' });
 
   return { overall, scores, suggestions, keywordResults, words, lines };
 }
