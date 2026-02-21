@@ -103,8 +103,8 @@ function analyzeResume() {
 
 function performAnalysis(resume, jobDesc) {
   const lower = resume.toLowerCase();
-  // Fix 1: accurate word count — filter empty tokens
-  const words = resume.split(/\s+/).filter(w => w.length > 0).length;
+  // Fix 1: accurate word count — strip punctuation then filter empty tokens
+  const words = resume.split(/\s+/).filter(w => w.replace(/[^a-zA-Z0-9]/g,'').length > 0).length;
   const lines = resume.split('\n').filter(l => l.trim()).length;
 
   // Section detection
@@ -151,11 +151,11 @@ function performAnalysis(resume, jobDesc) {
     // Extract compound tech tokens (with dots, slashes, plus signs, hash)
     const compoundTokens = [...new Set(jdLower.match(/\b[\w]+(?:[./#+][\w]+)+\b/g) || [])];
 
-    // Extract regular words (min length 3, letters only)
+    // Extract regular words (min length 3, letters only) — >= 3 to include aws, gcp etc
     const singleTokens = [...new Set(jdLower.match(/\b[a-z]{3,}\b/g) || [])];
 
-    // Filter single tokens: remove stop words, require length > 3
-    const filteredSingle = singleTokens.filter(w => !stopWords.has(w) && w.length > 3);
+    // Filter single tokens: remove stop words, require length >= 3
+    const filteredSingle = singleTokens.filter(w => !stopWords.has(w) && w.length >= 3);
 
     // Combine: compound tokens first, then single words, deduplicated
     const allKeywords = [...new Set([...compoundTokens, ...filteredSingle])];
@@ -167,9 +167,9 @@ function performAnalysis(resume, jobDesc) {
       return new RegExp('(?:^|[\\s,/|&()])' + escaped + '(?=[\\s,/|&().!?]|$)').test(lower);
     };
 
-    // Take up to 30 most relevant keywords
-    const top30 = allKeywords.slice(0, 30);
-    keywordResults = top30.map(kw => ({ keyword: kw, found: matchKeyword(kw) }));
+    // Take up to 50 keywords to cover full JD
+    const top50 = allKeywords.slice(0, 50);
+    keywordResults = top50.map(kw => ({ keyword: kw, found: matchKeyword(kw) }));
   }
 
   // Suggestions
