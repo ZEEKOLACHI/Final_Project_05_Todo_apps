@@ -43,15 +43,20 @@ project/
 
 ## 🌐 Live Site
 
-**GitHub Pages:** https://zeekolachi.github.io/Final_Project_05_Todo_apps/
+| Platform | URL |
+|----------|-----|
+| **Vercel** | https://hackathon-0-skills.vercel.app |
+| **GitHub Pages** | https://zeekolachi.github.io/Final_Project_05_Todo_apps/ |
 
-| App | Direct Link |
-|-----|-------------|
-| Resume Analyzer | https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/resume-analyzer.html |
-| Pomodoro Timer | https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/pomodoro-timer.html |
-| Expense Tracker | https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/expense-tracker.html |
-| Markdown → PDF | https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/markdown-to-pdf.html |
-| QR Code Generator | https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/qr-code-generator.html |
+### Direct App Links
+
+| App | Vercel | GitHub Pages |
+|-----|--------|--------------|
+| Resume Analyzer | [Open](https://hackathon-0-skills.vercel.app/apps/resume-analyzer.html) | [Open](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/resume-analyzer.html) |
+| Pomodoro Timer | [Open](https://hackathon-0-skills.vercel.app/apps/pomodoro-timer.html) | [Open](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/pomodoro-timer.html) |
+| Expense Tracker | [Open](https://hackathon-0-skills.vercel.app/apps/expense-tracker.html) | [Open](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/expense-tracker.html) |
+| Markdown → PDF | [Open](https://hackathon-0-skills.vercel.app/apps/markdown-to-pdf.html) | [Open](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/markdown-to-pdf.html) |
+| QR Code Generator | [Open](https://hackathon-0-skills.vercel.app/apps/qr-code-generator.html) | [Open](https://zeekolachi.github.io/Final_Project_05_Todo_apps/apps/qr-code-generator.html) |
 
 ## 🚀 How to Deploy (Free)
 
