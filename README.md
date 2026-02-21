@@ -1,8 +1,6 @@
 # 🚀 Hackathon 0 — 5 Deployable AI Skills & Apps
 
-Built for **PIAIC Hackathon 0** | Inspired by **Sir Qasim's AI Employee Vault**
-
-> **Final Project of NED Course — Fundamental of Agentic AI**
+**Sir Qasim's Assignment** | Final Project (FUNDAMENTAL OF AGENTIC AI) — NED UNIVERSITY COURSE & PIAIC HACKATHON-0
 
 ## 🏠 Landing Page
 
@@ -109,4 +107,4 @@ These skills can be loaded into **Claude Code** or **Claude.ai** as custom skill
 
 ---
 
-**Built for PIAIC Hackathon 0** | Sir Qasim's Assignment
+**Sir Qasim's Assignment** | Final Project (FUNDAMENTAL OF AGENTIC AI) — NED UNIVERSITY COURSE & PIAIC HACKATHON-0
